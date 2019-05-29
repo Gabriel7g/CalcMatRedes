@@ -1,0 +1,12 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+.mainFxmlClass {
+    -fx-background-image: url('rede-geometrica.jpg');
+}
+
+#formulario {
+    -fx-background-color: rgba(255, 255, 255, 0.7);
+    -fx-border-radius: 20%;
+}
