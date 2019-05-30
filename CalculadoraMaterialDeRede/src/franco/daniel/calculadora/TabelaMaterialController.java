@@ -25,13 +25,11 @@ public class TabelaMaterialController extends ModalController {
     @FXML private TableColumn<Item, String> materialMiscelaneaCol;
     @FXML private TableColumn<Item, String> tipoMiscelaneaCol;
     @FXML private TableColumn<Item, String> quantidadeMiscelaneaCol;
-    
-    @FXML private TextArea observacoesTextArea;
-    
+        
     private final int numPortasPP = 24;
     private final int tamMinimoRack = 12;
     private final int tamMaximoRack = 48;
-    private String categoria = "6a";
+    private String categoria = "6";
     private int pontosTelecom;
     private int pontosSimples;
     private int pontosCFTV;
@@ -53,11 +51,6 @@ public class TabelaMaterialController extends ModalController {
         tipoMiscelaneaCol.setCellValueFactory(tipoFac);
         quantidadePrincipalCol.setCellValueFactory(quantidadeFac);
         quantidadeMiscelaneaCol.setCellValueFactory(quantidadeFac);
-        
-        observacoesTextArea.setText("Consideramos os seguintes valores:\n"
-                + "- Rede estruturada conforme a categoria "+ categoria + ";\n"
-                + "- Limite de tamanho de malha horizontal de " + limiteMalhaHorizontal + " metros;\n"
-                + "- Racks somente de piso (tamanhos de " + tamMinimoRack + "U a " + tamMaximoRack + "U);");
     }
     
     public void setParametros(Map<String, Integer> params) {

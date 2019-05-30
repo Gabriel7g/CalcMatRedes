@@ -8,7 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="CalculadoraMaterialDeRede.jar" size="64928" download="eager" />
+    <jar href="CalculadoraMaterialDeRede.jar" size="64749" download="eager" />
   </resources>
   <jfx:javafx-desc  width="800" height="600" main-class="franco.daniel.calculadora.CalculadoraApplication"  name="CalculadoraMaterialDeRede" />
   <update check="always"/>
