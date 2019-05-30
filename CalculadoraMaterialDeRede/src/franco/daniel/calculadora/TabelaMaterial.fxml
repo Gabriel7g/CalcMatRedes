@@ -7,7 +7,6 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.effect.Glow?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -64,11 +63,6 @@
                   </ScrollPane>
                </content>
           </TitledPane>
-            <TitledPane animated="false" prefHeight="200.0" prefWidth="200.0" text="Observações">
-               <content>
-                  <TextArea fx:id="observacoesTextArea" editable="false" prefHeight="200.0" prefWidth="200.0" />
-               </content>
-            </TitledPane>
         </panes>
       </Accordion>
       <Button layoutX="373.0" layoutY="542.0" mnemonicParsing="false" onAction="#voltarHandler" text="Voltar" />

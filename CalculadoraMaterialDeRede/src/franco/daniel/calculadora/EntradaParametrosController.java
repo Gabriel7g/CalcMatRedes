@@ -64,10 +64,23 @@ public class EntradaParametrosController implements Controller {
         Map<String, Integer> params = new HashMap<>();
         
         try {
-            params.put("pontosTelecom", Integer.parseInt(pontosTelecomField.getText()));
-            params.put("pontosSimples", Integer.parseInt(pontosSimplesField.getText()));
-            params.put("pontosCFTV", Integer.parseInt(pontosCFTVField.getText()));
-            params.put("pontosVoz", Integer.parseInt(pontosVozField.getText()));
+            int numPontosTelecom = Integer.parseInt(pontosTelecomField.getText()),
+                numPontosSimples = Integer.parseInt(pontosSimplesField.getText()),
+                numPontosCFTV = Integer.parseInt(pontosCFTVField.getText()),
+                numPontosVoz = Integer.parseInt(pontosVozField.getText());
+            
+            if (numPontosTelecom < numPontosCFTV + numPontosVoz) {
+                new Alert.AlertBuilder("O número de pontos de telecom informado é inválido. Confira se o número de pontos com serviços específicos ultrapassa esse valor.")
+                    .type(AlertType.WARNING)
+                    .build()
+                    .show();
+                return;
+            }
+            
+            params.put("pontosTelecom", numPontosTelecom);
+            params.put("pontosSimples", numPontosSimples);
+            params.put("pontosCFTV", numPontosCFTV);
+            params.put("pontosVoz", numPontosVoz);
             params.put("rackFechado", rackFechadoRadio.isSelected() ? 1 : 0);
             params.put("limiteMalhaHorizontal", Integer.parseInt(limiteMHField.getText()));
             params.put("categoria", catComboBox.getSelectionModel().getSelectedIndex());
