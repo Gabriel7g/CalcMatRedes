@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Accordion;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -27,11 +28,10 @@ public class TabelaMaterialController extends ModalController {
     
     @FXML private TextArea observacoesTextArea;
     
-    private final String categoria = "6";
-    private final int proporcaoPABX = 4;
     private final int numPortasPP = 24;
     private final int tamMinimoRack = 12;
     private final int tamMaximoRack = 48;
+    private String categoria = "6a";
     private int pontosTelecom;
     private int pontosSimples;
     private int pontosCFTV;
@@ -56,10 +56,8 @@ public class TabelaMaterialController extends ModalController {
         
         observacoesTextArea.setText("Consideramos os seguintes valores:\n"
                 + "- Rede estruturada conforme a categoria "+ categoria + ";\n"
-                + "- Proporção do PABX de 1:" + proporcaoPABX + ";\n"
                 + "- Limite de tamanho de malha horizontal de " + limiteMalhaHorizontal + " metros;\n"
-                + "- Racks somente de piso (tamanhos de " + tamMinimoRack + "U a " + tamMaximoRack + "U);"
-                + "- Quantidade de troncos vindos da operadora em conformidade com a quantidade de pontos de voz informada.");
+                + "- Racks somente de piso (tamanhos de " + tamMinimoRack + "U a " + tamMaximoRack + "U);");
     }
     
     public void setParametros(Map<String, Integer> params) {
@@ -69,6 +67,7 @@ public class TabelaMaterialController extends ModalController {
         pontosVoz = params.get("pontosVoz");
         rackFechado = params.get("rackFechado") == 1;
         limiteMalhaHorizontal = params.get("limiteMalhaHorizontal");
+        categoria = EntradaParametrosController.CATEGORIAS[params.get("categoria")];
         calcularItens();
     }
     
@@ -76,7 +75,8 @@ public class TabelaMaterialController extends ModalController {
         
         ObservableList<Item> listaPrincipais = FXCollections.observableArrayList(),
                              listaMisc = FXCollections.observableArrayList();
-
+        final int pontosTelecomGerais = pontosTelecom - (pontosCFTV + pontosVoz);
+        
         /* Preenchimento da lista principal: */
         
         // ATR:
@@ -85,18 +85,23 @@ public class TabelaMaterialController extends ModalController {
         
         listaPrincipais.add(new Item("Tomadas Fêmea", "RJ-45 Cat " + categoria, numTomadas));
         
-        int numEspelhos = pontosTelecom + pontosCFTV + pontosVoz + pontosSimples;
+        int numEspelhos = pontosTelecom + pontosSimples;
         
         listaPrincipais.add(new Item("Espelhos", String.format("2x4\", furação %s",
                 pontosSimples != 0 ? ("simples" + ((numEspelhos - pontosSimples == 0) ? "" : " e dupla")) : "dupla"), numEspelhos));
         
-        int numPatchCords = (pontosTelecom + pontosCFTV) * 2 + pontosSimples;
+        int totalPatchCords = pontosTelecom * 2 + pontosSimples,
+            numPatchCordsCFTV = pontosCFTV * 2,
+            numPatchCordsVoz = pontosVoz * 2,
+            numPatchCordsGerais = pontosTelecomGerais * 2 + pontosSimples;
         
-        listaPrincipais.add(new Item("Patch Cords", "Flex, Cat " + categoria + ", azul, 3m", numPatchCords));
+        listaPrincipais.add(new Item("Patch Cords", "Flex, Cat " + categoria + ", azul, 1m (CFTV/IP) ou 3m (outros serviços)",
+                String.format("%d (%d para CFTV/IP e %d para outros serviços)", totalPatchCords, numPatchCordsCFTV, numPatchCordsVoz + numPatchCordsGerais)));
         
-        int numEtiquetasPontos = (pontosTelecom + pontosCFTV + pontosVoz) * 3 + pontosSimples * 2;
+        int numEtiquetasPontos = pontosTelecom * 3 + pontosSimples * 2;
         
-        listaPrincipais.add(new Item("Etiquetas para Pontos de Telecom/Rede", "-", numEtiquetasPontos));
+        listaPrincipais.add(new Item("Etiquetas para Pontos de Telecom/Rede", "-",
+                String.format("%d (%d de furação simples e %d de furação dupla)", numEtiquetasPontos, pontosSimples * 2, pontosTelecom * 3)));
         
         // MH:
         
@@ -114,19 +119,12 @@ public class TabelaMaterialController extends ModalController {
         
         // SET:
         
-        int numTroncos = (int) Math.ceil(pontosVoz * 2.0 / proporcaoPABX),        
-            numPPDados = (int) Math.ceil((double) numPatchCords / numPortasPP),
-            numPPTroncos = (int) Math.ceil((double) numTroncos / numPortasPP),
-            numPPRamais = (int) Math.ceil(((double) numTroncos * proporcaoPABX) / numPortasPP),
-            totalPP = numPPDados + 2 * numPPTroncos + numPPRamais;
+        int totalPP = (int) Math.ceil((double) totalPatchCords / numPortasPP);
         
         listaPrincipais.add(new Item("Patch Panels", numPortasPP + " portas, 1U, fixo, Cat " + categoria,
-                String.format("%d (%d para dados, \n%d para troncos, %d para o PABX \ne %d para os ramais)",
-                    totalPP, numPPDados, numPPTroncos, numPPTroncos, numPPRamais)));
+                totalPP));
         
-        int numOrganizadoresFrontais = totalPP + numPPDados;
-        System.out.println("numPPDados: " + numPPDados);
-        System.out.println("Org: " + totalPP + " + " + numPPDados + " = " + numOrganizadoresFrontais);
+        int numOrganizadoresFrontais = totalPP * 2;
         int tamBandeja = 4;
         int tamExaustor = rackFechado ? 2 : 0;
         int unidadesRack = 1;
@@ -154,21 +152,21 @@ public class TabelaMaterialController extends ModalController {
         listaPrincipais.add(new Item("Rack", String
                 .format("%s, %dU", rackFechado ? "Fechado" : "Aberto", tamRack), unidadesRack));
         
-        int numPCDados = numPatchCords,
-            numPCPABX = numPPTroncos * numPortasPP,
-            numPCRamais = numPPRamais * numPortasPP,
-            totalPC = numPCDados + numPCPABX + numPCRamais;
+        int numPCGerais = numPatchCordsGerais,
+            numPCCFTV = numPatchCordsCFTV,
+            numPCVoz = numPatchCordsVoz,
+            totalPC = totalPatchCords;
         
         listaPrincipais.add(new Item("Patch Cables", "Cat " + categoria + ", 2,5m",
-                String.format("%d (%d para dados (azul), \n%d para tronco/PÀBX (verde) \ne %d para ramal (amarelo)",
-                    totalPC, numPCDados, numPCPABX, numPCRamais)));
+                String.format("%d (%d para serviços gerais (azul), \n%d para CFTV/IP (vermelho) \ne %d para voz (amarelo)",
+                    totalPC, numPCGerais, numPCCFTV, numPCVoz)));
         
         /* Preenchimento da lista de miscelânea: */
         
         listaMisc.add(new Item("Porca-gaiola", "-", tamRack * unidadesRack * 4));
         listaMisc.add(new Item("Abraçadeira", "Plástica (100 unids. por pacote)", unidadesRack));
         listaMisc.add(new Item("Abraçadeira", "Velcro (3m)", unidadesRack));
-        listaMisc.add(new Item("Filtro de Linha", "8 tomadas", unidadesRack)); // considerar switches
+        listaMisc.add(new Item("Filtro de Linha", "8 tomadas", unidadesRack * ((int) Math.ceil((double) totalPP / 8)))); // considerar switches
         listaMisc.add(new Item("Etiquetas", "Patch Cable", totalPC * 2));
         listaMisc.add(new Item("Etiquetas", "Patch Panel", totalPP * numPortasPP));
         listaMisc.add(new Item("Organizadores de Cabo", "Lateral, " + tamRack + "U", unidadesRack * 2));

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.net.URL?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
@@ -14,12 +16,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="franco.daniel.calculadora.EntradaParametrosController">
+<AnchorPane id="AnchorPane" prefHeight="476.0" prefWidth="688.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="franco.daniel.calculadora.EntradaParametrosController">
     <stylesheets>
         <URL value="@style.css" />
     </stylesheets>
    <children>
-      <VBox fx:id="formulario" alignment="CENTER" layoutX="80.0" layoutY="20.0" prefHeight="400.0" prefWidth="536.0" spacing="15.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="20.0">
+      <VBox fx:id="formulario" alignment="CENTER" layoutX="1.0" layoutY="14.0" prefHeight="431.0" prefWidth="688.0" spacing="15.0" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="14.0">
          <children>
             <Label alignment="TOP_CENTER" contentDisplay="CENTER" text="Calculadora de Materiais de Rede" textAlignment="CENTER">
                <font>
@@ -30,10 +32,10 @@
                </effect>
             </Label>
             <Label prefHeight="43.0" prefWidth="246.0" text="Para calcular a quantidade de material, informe os seguintes dados:" textAlignment="CENTER" wrapText="true" />
-            <GridPane fx:id="formulario" alignment="CENTER" vgap="10.0">
+            <GridPane fx:id="formulario" alignment="CENTER" prefHeight="230.0" prefWidth="439.0" vgap="10.0">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="309.0" minWidth="10.0" prefWidth="296.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="214.0" minWidth="10.0" prefWidth="144.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="325.0" minWidth="10.0" prefWidth="223.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="214.0" minWidth="10.0" prefWidth="139.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -42,27 +44,35 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
                   <Label contentDisplay="RIGHT" prefHeight="59.0" prefWidth="349.0" text="Número de Pontos de Telecom:" />
-                  <TextField fx:id="pontosSimplesField" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="pontosSimplesField" prefHeight="6.0" prefWidth="92.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <Label contentDisplay="CENTER" prefHeight="59.0" prefWidth="426.0" text="Número de Pontos de Conexão de Rede:" wrapText="true" GridPane.rowIndex="1" />
-                  <TextField fx:id="pontosTelecomField" text="60" GridPane.columnIndex="1" />
+                  <TextField fx:id="pontosTelecomField" prefHeight="27.0" prefWidth="197.0" text="80" GridPane.columnIndex="1" />
                   <Label prefHeight="58.0" prefWidth="437.0" text="Número de Pontos CFTV/IP:" GridPane.rowIndex="2" />
-                  <TextField fx:id="pontosCFTVField" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="pontosCFTVField" prefHeight="25.0" prefWidth="117.0" text="10" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <Label contentDisplay="RIGHT" prefHeight="57.0" prefWidth="392.0" text="Número de Pontos de Voz sobre IP:" wrapText="true" GridPane.rowIndex="3" />
                   <TextField fx:id="pontosVozField" text="20" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#calcularHandler" text="Calcular" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                  <Label text="O rack é aberto ou fechado?" GridPane.rowIndex="4" />
-                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                  <Label text="O rack é aberto ou fechado?" GridPane.rowIndex="6" />
+                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
                      <children>
                         <RadioButton fx:id="rackAbertoRadio" mnemonicParsing="false" selected="true" text="Aberto" />
                         <RadioButton fx:id="rackFechadoRadio" mnemonicParsing="false" text="Fechado" />
                      </children>
                   </HBox>
+                  <Label text="Limite de Tamanho de Malha Horizontal:" GridPane.rowIndex="4" />
+                  <TextField fx:id="limiteMHField" text="30" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <Label text="Categoria adotada pela rede:" GridPane.rowIndex="5" />
+                  <ComboBox fx:id="catComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                </children>
             </GridPane>
+            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#calcularHandler" text="Calcular" textAlignment="CENTER" />
          </children>
+         <padding>
+            <Insets left="15.0" right="15.0" />
+         </padding>
       </VBox>
    </children>
 </AnchorPane>

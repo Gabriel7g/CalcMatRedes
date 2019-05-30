@@ -12,6 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.stage.Stage;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 
@@ -23,7 +24,10 @@ public class EntradaParametrosController implements Controller {
     @FXML private TextField pontosVozField;
     @FXML private RadioButton rackFechadoRadio;
     @FXML private RadioButton rackAbertoRadio;
+    @FXML private TextField limiteMHField;
+    @FXML private ComboBox<String> catComboBox;
     
+    public static final String[] CATEGORIAS = {"5", "5e", "6", "6a", "7", "7a"};
     private Stage stage;
     
     @Override
@@ -45,6 +49,9 @@ public class EntradaParametrosController implements Controller {
         
         rackFechadoRadio.setToggleGroup(rackSalaFechada);
         rackAbertoRadio.setToggleGroup(rackSalaFechada);
+        
+        catComboBox.getItems().addAll(CATEGORIAS);
+        catComboBox.getSelectionModel().select("6");
     }
     
     public void setStage(Stage stage) {
@@ -62,6 +69,8 @@ public class EntradaParametrosController implements Controller {
             params.put("pontosCFTV", Integer.parseInt(pontosCFTVField.getText()));
             params.put("pontosVoz", Integer.parseInt(pontosVozField.getText()));
             params.put("rackFechado", rackFechadoRadio.isSelected() ? 1 : 0);
+            params.put("limiteMalhaHorizontal", Integer.parseInt(limiteMHField.getText()));
+            params.put("categoria", catComboBox.getSelectionModel().getSelectedIndex());
             Modal.builder(TabelaMaterialController.class)
                     .ownerStage(stage)
                     .title("Tabela ─ Quantidade de Materiais de Rede")
